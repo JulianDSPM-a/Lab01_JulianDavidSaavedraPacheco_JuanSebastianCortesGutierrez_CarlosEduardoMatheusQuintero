@@ -1,0 +1,99 @@
+$date
+	Sat Oct 03 21:16:49 2026
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module tb_semaforo $end
+$var wire 3 ! led [2:0] $end
+$var reg 1 " clk $end
+$scope module uut $end
+$var wire 1 " clk $end
+$var reg 3 # led [2:0] $end
+$var integer 32 $ counter [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+$end
+#0
+$dumpvars
+b0 $
+bx #
+0"
+bx !
+$end
+#5000
+b0 $
+b1 !
+b1 #
+1"
+#10000
+0"
+#15000
+1"
+#20000
+0"
+b100110001001011010000000000 $
+#25000
+b100110001001011010000000000 $
+b11 !
+b11 #
+1"
+#30000
+0"
+#35000
+1"
+#40000
+0"
+b1001100010010110100000000000 $
+#45000
+b1001100010010110100000000000 $
+b10 !
+b10 #
+1"
+#50000
+0"
+#55000
+1"
+#60000
+0"
+b1110010011100001110000000000 $
+#65000
+b1110010011100001110000000000 $
+b11 !
+b11 #
+1"
+#70000
+0"
+#75000
+1"
+#80000
+0"
+b0 $
+#85000
+b0 $
+b1 !
+b1 #
+1"
+#90000
+0"
+#95000
+1"
+#100000
+0"
+b0 $
+#105000
+b1 $
+1"
+#110000
+0"
+#115000
+b10 $
+1"
+#120000
+0"

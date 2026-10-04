@@ -1,0 +1,25 @@
+# Resultados regenerables de simulacion y Vivado
+build/
+.Xil/
+*.jou
+*.log
+*.str
+*.vvp
+*.vcd
+*.wdb
+*.pb
+dfx_runtime.txt
+*.cache/
+*.runs/
+*.sim/
+*.hw/
+*.ip_user_files/
+__pycache__/
+.DS_Store
+Thumbs.db
+*.tmp
+# Los videos y las imágenes de evidencia se incluyen en la entrega.
+
+# Evidencias de GTKWave incluidas en la entrega
+!sim/*.vcd
+!sim/*.vvp
