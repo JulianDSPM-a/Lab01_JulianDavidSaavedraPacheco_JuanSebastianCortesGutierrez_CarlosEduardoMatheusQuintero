@@ -2,13 +2,10 @@
 
 **Video:** [Ver prueba funcional 3](tercera-prueba.mp4)
 
+Registro en video de la prueba funcional 3 sobre la Zybo Z7.
 
-**Descripción de la prueba:** [Indicar las entradas utilizadas y la operación realizada.]
+Para interpretar las entradas, `SW[3:0]` representa A y `BTN[3:0]` representa B antes del complemento. Los switches externos conectados a `BTN[4]` y `BTN[5]` seleccionan, respectivamente, el complemento de B y la operación: suma con `BTN[5]=0` y resta con `BTN[5]=1`.
 
-| Instante | SW `[3:0]` | BTN `[5:0]` | B efectivo | Operación | LED esperado | RGB esperado | Resultado observado |
-|---|---|---|---|---|---|---|---|
-| — | — | — | — | — | — | — | — |
+Los cuatro LEDs muestran los bits inferiores del resultado. El RGB indica rojo ante acarreo o préstamo; en su ausencia, verde si los operandos tienen unos comunes, azul si no los tienen y alguno es distinto de cero, o apagado si ambos son cero.
 
-`BTN[3:0]` corresponde a los botones de usuario de la placa; `BTN[4]` y `BTN[5]` corresponden a los switches externos de inversión y operación. Los vectores se escriben del bit más significativo al menos significativo.
-
-[Volver al informe](../../README.md#evidencias-de-funcionamiento)
+[Consultar las tablas del diseño](../../README.md#actividad-2-test-funcional-personalizado) · [Volver al informe](../../README.md#evidencias-de-funcionamiento)

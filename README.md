@@ -211,7 +211,7 @@ Las flechas representan dependencias y decisiones de una red combinacional, no i
 
 ## Simulaciones
 
-Los estímulos se describen en los testbenches de Verilog. Durante la simulación, `$dumpfile` y `$dumpvars` registran las señales en archivos VCD, que se abren en **GTKWave** para observar las entradas, las operaciones internas y las salidas. Las capturas muestran el smoke test de **0 a 120 ns** y el test funcional de **0 a 60 ns**.
+Los estímulos se describen en los testbenches de Verilog. Durante la simulación, `$dumpfile` y `$dumpvars` registran las señales en archivos VCD, que se abren en **GTKWave** para observar las entradas, las operaciones internas y las salidas. La simulación del smoke test abarca **0 a 120 ns** y la del test funcional, **0 a 60 ns**.
 
 ### Smoke test del semáforo
 
@@ -247,33 +247,35 @@ El circuito es combinacional, por lo que no necesita un reloj para actualizar su
 
 | Intervalo | SW = A | `BTN[5:0]` | BTN hexadecimal | B_temp | BTN4 / BTN5 | B efectivo | Operación |
 |---|---|---|---|---:|---|---:|---|
-| 0–10 ns | `1001` = 9 | `001100` | `0C` | 12 | 0 / 0 | 12 | 9 + 12 = 21 |
-| 10–20 ns | `0100` = 4 | `111101` | `3D` | 13 | 1 / 1 | 2 | 4 − 2 = 2 |
-| 20–30 ns | `0000` = 0 | `001010` | `0A` | 10 | 0 / 0 | 10 | 0 + 10 = 10 |
-| 30–40 ns | `0101` = 5 | `101000` | `28` | 8 | 0 / 1 | 8 | 5 − 8 = −3 |
-| 40–60 ns | `0111` = 7 | `000100` | `04` | 4 | 0 / 0 | 4 | 7 + 4 = 11 |
+| 0–10 ns | `1001` = 9 | `000011` | `03` | 3 | 0 / 0 | 3 | 9 + 3 = 12 |
+| 10–20 ns | `0100` = 4 | `101111` | `2F` | 15 | 0 / 1 | 15 | 4 − 15 = −11 |
+| 20–30 ns | `0000` = 0 | `010010` | `12` | 2 | 1 / 0 | 13 | 0 + 13 = 13 |
+| 30–40 ns | `0101` = 5 | `001010` | `0A` | 10 | 0 / 0 | 10 | 5 + 10 = 15 |
+| 40–60 ns | `0111` = 7 | `000001` | `01` | 1 | 0 / 0 | 1 | 7 + 1 = 8 |
 
-#### Evidencia en GTKWave: 0–60 ns
+#### Evidencia en GTKWave
 
-![Simulación del test funcional en GTKWave entre 0 y 60 ns](sim/img/test_funcional_gtkwave.png)
+![Entradas SW y BTN y salidas LED y RGB del test funcional en GTKWave](sim/img/test_funcional_gtkwave.png)
 
-Los buses de esta captura están representados en **hexadecimal**. Por ejemplo, `resultado=15` significa `0x15=21` en decimal y `resultado=1D` significa `0x1D=29`, que es la representación de −3 módulo 32. Las señales A, B y SW pueden consultarse en el [VCD](sim/TestFuncional.vcd); la imagen muestra BTN, LED, las operaciones lógicas, el resultado y los tres canales RGB.
+La captura muestra `BTN[5:0]`, `SW[3:0]`, `LED[3:0]` y los canales del RGB desde 0 hasta poco después de 50 ns. Se observan las cinco combinaciones aplicadas y la secuencia de colores **verde → rojo → azul → azul → verde**. El último caso continúa sin cambios hasta los 60 ns, cuando termina la simulación.
+
+El archivo [`TestFuncional.vcd`](sim/TestFuncional.vcd) contiene las entradas, los operandos, las operaciones lógicas y las salidas. Al visualizar los buses en hexadecimal, `resultado=15` representa `0x15=21`, que corresponde a −11 módulo 32 para la resta 4−15.
 
 | Intervalo | `res_and` | `res_or` | `res_xor` | `resultado[4:0]` | `LED[3:0]` | RGB `{R,G,B}` | Color |
 |---|---|---|---|---|---|---|---|
-| 0–10 ns | `8` | `D` | `5` | `15` | `5` | `100` | Rojo |
-| 10–20 ns | `0` | `6` | `6` | `02` | `2` | `001` | Azul |
-| 20–30 ns | `0` | `A` | `A` | `0A` | `A` | `001` | Azul |
-| 30–40 ns | `0` | `D` | `D` | `1D` | `D` | `100` | Rojo |
-| 40–60 ns | `4` | `7` | `3` | `0B` | `B` | `010` | Verde |
+| 0–10 ns | `1` | `B` | `A` | `0C` | `C` | `010` | Verde |
+| 10–20 ns | `4` | `F` | `B` | `15` | `5` | `100` | Rojo |
+| 20–30 ns | `0` | `D` | `D` | `0D` | `D` | `001` | Azul |
+| 30–40 ns | `0` | `F` | `F` | `0F` | `F` | `001` | Azul |
+| 40–60 ns | `1` | `7` | `6` | `08` | `8` | `010` | Verde |
 
-Las columnas de operaciones y resultados están en hexadecimal; el vector RGB está en binario. La imagen ordena los canales de arriba hacia abajo como `RGB_B`, `RGB_G`, `RGB_R`.
+La tabla incluye las señales internas registradas en el VCD, aunque no estén desplegadas en esta captura. Las columnas de operaciones y resultados están en hexadecimal; el vector RGB está en binario.
 
-- **0–10 ns:** la suma 9+12 produce 21. Los cuatro LEDs muestran 5 y el rojo indica acarreo, con prioridad sobre la condición AND no nula.
-- **10–20 ns:** B_temp=13 (`1101`) se complementa para obtener B=2 (`0010`). La resta 4−2 produce 2; AND es cero y OR/XOR son no nulos, por lo que se enciende azul.
-- **20–30 ns:** la suma 0+10 produce 10. Al no existir unos comunes entre los operandos, se mantiene azul.
-- **30–40 ns:** la resta 5−8 produce −3. El resultado de cinco bits es `11101`, los LEDs muestran `1101` y el rojo indica préstamo.
-- **40–60 ns:** la suma 7+4 produce 11. AND=4 es distinto de cero y no existe acarreo; se enciende verde.
+- **0–10 ns:** la suma 9+3 produce 12. AND=1 es distinto de cero y no hay acarreo, por lo que se enciende verde.
+- **10–20 ns:** la resta 4−15 produce −11. El resultado de cinco bits es `10101`, los LEDs muestran `0101` y el rojo indica préstamo, con prioridad sobre la condición AND no nula.
+- **20–30 ns:** B_temp=2 (`0010`) se complementa para obtener B=13 (`1101`). La suma 0+13 produce 13; AND es cero y OR/XOR son no nulos, por lo que se enciende azul.
+- **30–40 ns:** la suma 5+10 produce 15. Los operandos no tienen unos comunes y se mantiene azul.
+- **40–60 ns:** la suma 7+1 produce 8. AND=1 es distinto de cero y no existe acarreo; se enciende verde.
 
 Esta simulación permite observar suma, resta, complemento de B y la prioridad de los tres colores en las cinco combinaciones aplicadas. No incluye un barrido exhaustivo de entradas ni comprobaciones automáticas con aserciones; la comparación se realiza mediante las formas de onda y los resultados calculados.
 

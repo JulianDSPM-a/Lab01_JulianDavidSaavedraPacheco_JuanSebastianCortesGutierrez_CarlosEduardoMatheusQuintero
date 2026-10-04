@@ -12,6 +12,4 @@ El módulo `Semaforo`, programado mediante su bitstream, controla el LED RGB LD6
 | Verde | `010` | 0,64 s |
 | Amarillo 2 | `011` | 0,640000008 s |
 
-**Observaciones del video:** [Describir la secuencia observada.]
-
 [Volver al informe](../../README.md#evidencias-de-funcionamiento)

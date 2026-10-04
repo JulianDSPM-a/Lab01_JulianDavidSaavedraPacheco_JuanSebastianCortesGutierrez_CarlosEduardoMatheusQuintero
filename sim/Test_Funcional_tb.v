@@ -2,14 +2,17 @@
 
 module TestFuncional_tb;
 
+    // Entradas
     reg [3:0] SW;
     reg [5:0] BTN;
 
+    // Salidas
     wire [3:0] LED;
     wire RGB_R;
     wire RGB_G;
     wire RGB_B;
 
+    // Instancia del circuito
     TestFuncional uut (
         .SW(SW),
         .BTN(BTN),
@@ -21,39 +24,137 @@ module TestFuncional_tb;
 
     initial begin
 
+        // Archivo para GTKWave
         $dumpfile("TestFuncional.vcd");
         $dumpvars(0, TestFuncional_tb);
 
-        // Caso 1 (0-10 ns): A=9, B=12, suma=21 (5'h15).
-        // LED=5; AND=8, OR=D, XOR=5; RGB rojo por acarreo.
+
+        // =================================================
+        // CASO 1: SUMA
+        // =================================================
+        // A = 9
+        // B = 3
+        //
+        // 9 + 3 = 12
+        //
+        // A       = 1001
+        // B       = 0011
+        // Resultado = 01100
+        //
+        // res_and = 0001
+        // resultado[4] = 0
+        //
+        // RGB_G = ~resultado[4] & |res_and
+        // RGB_G = 1
+        //
+        // Se enciende VERDE
+        // =================================================
+
         SW  = 4'b1001;
-        BTN = 6'b001100;
+        BTN = 6'b000011;
         #10;
 
-        // Caso 2 (10-20 ns): A=4, B_temp=13, BTN4=1 -> B=2.
-        // BTN5=1: 4-2=2. AND=0, OR=6, XOR=6; RGB azul.
+
+        // =================================================
+        // CASO 2: RESTA
+        // =================================================
+        // A = 4
+        // B = 15
+        //
+        // 4 - 15 = -11
+        //
+        // En 5 bits:
+        // -11 = 10101
+        //
+        // resultado[4] = 1
+        //
+        // RGB_R = 1
+        //
+        // Se enciende ROJO
+        // =================================================
+
         SW  = 4'b0100;
-        BTN = 6'b111101;
+        BTN = 6'b101111;
         #10;
 
-        // Caso 3 (20-30 ns): A=0, B=10, BTN4=0, BTN5=0.
-        // Suma=10 (A hexadecimal); AND=0, OR=A, XOR=A; RGB azul.
+
+        // =================================================
+        // CASO 3: COMPLEMENTO DE B
+        // =================================================
+        // A = 0
+        // B = 2
+        //
+        // BTN[4] = 1 -> se invierte B
+        //
+        // B = 0010
+        // ~B = 1101
+        //
+        // 0 + 13 = 13
+        //
+        // Resultado = 01101
+        //
+        // res_and = 0000
+        // res_or  = 1101
+        // res_xor = 1101
+        //
+        // RGB_B = 1
+        //
+        // Se enciende AZUL
+        // =================================================
+
         SW  = 4'b0000;
+        BTN = 6'b010010;
+        #10;
+
+
+        // =================================================
+        // CASO 4: SUMA 5 + 10
+        // =================================================
+        // A = 5
+        // B = 10
+        //
+        // 5 + 10 = 15
+        //
+        // Resultado = 01111
+        //
+        // resultado[4] = 0
+        //
+        // res_and = 0000
+        // res_or  = 1111
+        // res_xor = 1111
+        //
+        // Se enciende AZUL
+        // =================================================
+
+        SW  = 4'b0101;
         BTN = 6'b001010;
         #10;
 
-        // Caso 4 (30-40 ns): A=5, B=8, BTN4=0, BTN5=1.
-        // Resta=-3 -> 5'h1D; LED=D; AND=0, OR=D, XOR=D; RGB rojo.
-        SW  = 4'b0101;
-        BTN = 6'b101000;
-        #10;
 
-        // Caso 5 (40-60 ns): A=7, B=4, BTN4=0, BTN5=0.
-        // Suma=11 (B hexadecimal); AND=4, OR=7, XOR=3; RGB verde.
+        // =================================================
+        // CASO 5: SUMA 7 + 1
+        // =================================================
+        // A = 7
+        // B = 1
+        //
+        // 7 + 1 = 8
+        //
+        // Resultado = 01000
+        //
+        // res_and = 0001
+        // resultado[4] = 0
+        //
+        // RGB_G = 1
+        //
+        // Se enciende VERDE
+        // =================================================
+
         SW  = 4'b0111;
-        BTN = 6'b000100;
+        BTN = 6'b000001;
         #10;
 
+
+        // Fin de la simulación
         #10;
         $finish;
 
